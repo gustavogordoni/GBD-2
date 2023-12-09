@@ -1,0 +1,95 @@
+CREATE TABLE criminoso(
+	codcriminoso int,
+	nome VARCHAR(50),
+	doc_identificacao int,
+	
+	CONSTRAINT pk_criminoso PRIMARY KEY (codcriminoso)
+);
+
+CREATE TABLE vitima(
+	codvit int,
+	cidade VARCHAR(50),
+	rg VARCHAR(50),
+	nome VARCHAR(50),
+	
+	CONSTRAINT pk_vitima PRIMARY KEY (codvit)
+);
+
+CREATE TABLE delegacia(
+	coddel int,
+	endereco VARCHAR(50),
+	delegado VARCHAR(50),
+	telefone VARCHAR(50),
+	
+	CONSTRAINT pk_delegacia PRIMARY KEY (coddel)
+);
+
+CREATE TABLE crime(
+	codcrime int,
+	data date,
+	local VARCHAR(50),
+	codcriminoso int, 
+	coddel int, 
+	codvit int,
+	
+	CONSTRAINT pk_crime PRIMARY KEY (codcrime),
+	CONSTRAINT fk_criminoso FOREIGN KEY (codcriminoso) REFERENCES criminoso (codcriminoso),
+	CONSTRAINT fk_delegacia FOREIGN KEY (coddel) REFERENCES delegacia (coddel), 
+	CONSTRAINT fk_vitima FOREIGN KEY (codvit) REFERENCES vitima (codvit)
+);
+
+INSERT INTO delegacia VALUES
+(1, 'Rua 01', 'João Silva', '11111-1111'),
+(2, 'Rua 02', 'Maria Souza', '22222-2222'),
+(3, 'Rua 03', 'Carlos Alberto', '33333-3333');
+	
+INSERT INTO criminoso VALUES
+(1, 'Guerreiro', 111),
+(2, 'Victor', 222),
+(3, 'Nelson', 333),
+(4, 'Larissa', 444),
+(5, 'Rafael', 555),
+(6, 'Yasmin', 666),
+(7, 'Julia', 777);
+
+INSERT INTO vitima VALUES
+(1, 'Cardoso', '11.111.111-1', 'Betânia'),
+(2, 'Votuporanga', '22.222.222-2', 'Heitor'),
+(3, 'Mira Estrela', '33.333.333-3', 'Luiz'),
+(4, 'Valentim Gentil', '44.444.444-4', 'José'),
+(5, 'Votuporanga', '55.555.555-5', 'Cauã'),
+(6, 'Floreal', '66.666.666-6', 'Cleiton'),
+(7, 'Votuporanga', '77.777.777-7', 'Anna'),
+(8, 'Macedônia', '88.888.888-8', 'Lucas');
+
+
+INSERT INTO crime VALUES
+(1, '2022-07-21', 'Padaria Bom Sonho', 1, 1, 1),
+(2, '2021-10-30', 'Padaria Santo Antônio', 2, 2, 2),
+(3, '2023-02-12', 'Bar do Luciano', 3, 3, 3),
+(4, '2022-01-10', 'Papelaria Barateira', 4, 1, 4),
+(5, '2021-09-18', 'Praça da Penha', 5, 2, 5),
+(6, '2020-02-01', 'Açaiteria Dois Irmãos', 6, 3, 6),
+(7, '2023-12-12', 'IFSP - Votuporanga', 7, 3, 7),
+(8, '2021-10-04', 'Mercado Valter', 1, 1, 8),
+(9, '2020-03-07', 'A Barateira', 2, 2, 1),
+(10, '2019-09-21', 'Diogo Lanches', 3, 3, 2);
+
+-- 6)
+-- I)
+SELECT * FROM criminoso WHERE nome = 'Rafael';
+
+-- II)
+SELECT * FROM vitima WHERE nome = 'José';
+
+-- III)
+SELECT ce.* FROM delegacia d
+	INNER JOIN crime ce ON
+	d.coddel = ce.coddel
+	WHERE d.delegado = 'Carlos Alberto';
+
+-- IV)
+SELECT ce.* FROM crime ce
+	INNER JOIN criminoso co ON
+	ce.codcriminoso = co.codcriminoso
+	WHERE co.nome = 'Guerreiro';
